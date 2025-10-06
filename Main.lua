@@ -1,108 +1,87 @@
--- AnnouncementLocalScript.lua
--- Full visible text + small clean UI
--- Opens Discord link in default browser (Chrome if default)
--- By: Gonzales Official
+--[[ 
+    📢 ANNOUNCEMENT UI | Roblox Script Executor Compatible
+    Made by: Gonzales Official
+    Features:
+      - Small movable tab
+      - Full visible announcement
+      - Discord button (opens via Chrome by copying link)
+      - Works in all games
+]]
 
 local Players = game:GetService("Players")
-local GuiService = game:GetService("GuiService")
-local StarterGui = game:GetService("StarterGui")
+local CoreGui = game:GetService("CoreGui")
+local plr = Players.LocalPlayer
 
-local DISCORD_INVITE = "https://discord.gg/N3Zmrm3e2n"
+-- Remove existing UI
+if CoreGui:FindFirstChild("AnnouncementUI") then
+    CoreGui:FindFirstChild("AnnouncementUI"):Destroy()
+end
 
-local player = Players.LocalPlayer
-if not player then return end
-
--- Screen GUI
+-- ScreenGui
 local gui = Instance.new("ScreenGui")
-gui.Name = "DiscordAnnouncement"
+gui.Name = "AnnouncementUI"
 gui.ResetOnSpawn = false
-gui.Parent = player:WaitForChild("PlayerGui")
+gui.Parent = CoreGui
 
--- Main Frame (slightly taller to fit full text)
-local frame = Instance.new("Frame")
-frame.Size = UDim2.new(0, 360, 0, 170)
-frame.Position = UDim2.new(0.5, -180, 0.75, -85)
-frame.BackgroundColor3 = Color3.fromRGB(25, 25, 30)
-frame.BorderSizePixel = 0
-frame.Parent = gui
+-- Main Frame
+local main = Instance.new("Frame")
+main.Size = UDim2.new(0, 280, 0, 140)
+main.Position = UDim2.new(0.35, 0, 0.35, 0)
+main.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+main.BorderSizePixel = 0
+main.Active = true
+main.Draggable = true
+main.Parent = gui
 
-local corner = Instance.new("UICorner")
-corner.CornerRadius = UDim.new(0, 12)
-corner.Parent = frame
+-- Rounded Corners
+local corner = Instance.new("UICorner", main)
+corner.CornerRadius = UDim.new(0, 10)
 
--- Title / Announcement text (fits fully visible)
+-- Title
 local title = Instance.new("TextLabel")
-title.Size = UDim2.new(1, -20, 0, 100)
-title.Position = UDim2.new(0, 10, 0, 12)
-title.BackgroundTransparency = 1
-title.Text = "📢 Announcement\nJoin my Discord Giveaway Executor & Script"
+title.Size = UDim2.new(1, 0, 0, 30)
+title.BackgroundColor3 = Color3.fromRGB(30, 144, 255)
+title.Text = "📢 ANNOUNCEMENT"
 title.TextColor3 = Color3.fromRGB(255, 255, 255)
 title.Font = Enum.Font.GothamBold
 title.TextScaled = true
-title.TextWrapped = true
-title.TextYAlignment = Enum.TextYAlignment.Center
-title.Parent = frame
+title.Parent = main
 
--- "Click Here" button (centered below text)
+local titleCorner = Instance.new("UICorner", title)
+titleCorner.CornerRadius = UDim.new(0, 10)
+
+-- Message
+local msg = Instance.new("TextLabel")
+msg.Size = UDim2.new(1, -20, 0, 60)
+msg.Position = UDim2.new(0, 10, 0, 40)
+msg.BackgroundTransparency = 1
+msg.Text = "Join My Discord Get Executor & Script For Free"
+msg.TextColor3 = Color3.fromRGB(255, 255, 255)
+msg.Font = Enum.Font.Gotham
+msg.TextWrapped = true
+msg.TextScaled = true
+msg.Parent = main
+
+-- Join Discord Button
 local button = Instance.new("TextButton")
-button.Size = UDim2.new(0.6, 0, 0, 40)
-button.Position = UDim2.new(0.2, 0, 0.75, 0)
-button.BackgroundColor3 = Color3.fromRGB(0, 150, 255)
-button.Text = "Click Here"
+button.Size = UDim2.new(0, 200, 0, 30)
+button.Position = UDim2.new(0.5, -100, 1, -40)
+button.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
+button.Text = "Join Discord"
 button.TextColor3 = Color3.fromRGB(255, 255, 255)
 button.Font = Enum.Font.GothamBold
 button.TextScaled = true
-button.AutoButtonColor = false
-button.Parent = frame
+button.Parent = main
 
-local btnCorner = Instance.new("UICorner")
-btnCorner.CornerRadius = UDim.new(0, 8)
-btnCorner.Parent = button
+local buttonCorner = Instance.new("UICorner", button)
+buttonCorner.CornerRadius = UDim.new(0, 8)
 
--- Hover effect
-button.MouseEnter:Connect(function()
-	button.BackgroundColor3 = Color3.fromRGB(0, 180, 255)
-end)
-button.MouseLeave:Connect(function()
-	button.BackgroundColor3 = Color3.fromRGB(0, 150, 255)
-end)
-
--- "X" close button
-local close = Instance.new("TextButton")
-close.Size = UDim2.new(0, 28, 0, 28)
-close.Position = UDim2.new(1, -34, 0, 6)
-close.BackgroundColor3 = Color3.fromRGB(40, 40, 45)
-close.Text = "✕"
-close.Font = Enum.Font.GothamBold
-close.TextSize = 18
-close.TextColor3 = Color3.fromRGB(220, 220, 220)
-close.Parent = frame
-
-local closeCorner = Instance.new("UICorner")
-closeCorner.CornerRadius = UDim.new(0, 6)
-closeCorner.Parent = close
-
-close.MouseButton1Click:Connect(function()
-	frame:Destroy()
-end)
-
--- Click opens Discord link in browser
+-- Button Function
 button.MouseButton1Click:Connect(function()
-	local success, err = pcall(function()
-		GuiService:OpenBrowserWindow(DISCORD_INVITE)
-	end)
-
-	if success then
-		StarterGui:SetCore("SendNotification", {
-			Title = "Opening Chrome...",
-			Text = "Joining Discord Giveaway Executor & Script...",
-			Duration = 4
-		})
-	else
-		StarterGui:SetCore("SendNotification", {
-			Title = "Join Manually",
-			Text = "Copy this link: " .. DISCORD_INVITE,
-			Duration = 6
-		})
-	end
+    setclipboard("https://discord.gg/N3Zmrm3e2n")
+    game:GetService("StarterGui"):SetCore("SendNotification", {
+        Title = "Copied!";
+        Text = "Discord link copied! Paste in Chrome to join.";
+        Duration = 5;
+    })
 end)
