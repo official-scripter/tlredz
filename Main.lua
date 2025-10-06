@@ -1,36 +1,34 @@
 --[[ 
-    📢 UNIVERSAL ANNOUNCEMENT UI | Roblox Script Executor Compatible
-    Created by: Gonzales Official
-    Features:
-      - Small movable UI
-      - "-" to hide / show
-      - "x" to destroy tab
-      - Works in all Roblox games
-      - Permanent script (never expires)
-      - Join Discord button
+📢 UNIVERSAL ANNOUNCEMENT UI | Roblox Script Executor Compatible
+Made by: Gonzales Official
+Features:
+- Small movable UI
+- "-" hides / shows content
+- "x" destroys UI
+- Works in all Roblox games
+- Safe for all executors
+- Join Discord button (copies link)
 ]]
 
--- Services
-local Players = game:GetService("Players")
-local CoreGui = game:GetService("CoreGui")
+-- Safe references
+local plr = game:GetService("Players").LocalPlayer
+local guiParent = game:GetService("CoreGui") or plr:WaitForChild("PlayerGui")
 local StarterGui = game:GetService("StarterGui")
-local plr = Players.LocalPlayer
 
--- Remove old UI if exists
-if CoreGui:FindFirstChild("AnnouncementUI") then
-    CoreGui:FindFirstChild("AnnouncementUI"):Destroy()
+-- Remove old UI
+if guiParent:FindFirstChild("AnnouncementUI") then
+	guiParent:FindFirstChild("AnnouncementUI"):Destroy()
 end
 
--- ScreenGui
+-- Create GUI
 local gui = Instance.new("ScreenGui")
 gui.Name = "AnnouncementUI"
 gui.ResetOnSpawn = false
-gui.IgnoreGuiInset = true
-gui.Parent = CoreGui
+gui.Parent = guiParent
 
 -- Main Frame
 local main = Instance.new("Frame")
-main.Size = UDim2.new(0, 260, 0, 130)
+main.Size = UDim2.new(0, 250, 0, 120)
 main.Position = UDim2.new(0.35, 0, 0.35, 0)
 main.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 main.Active = true
@@ -44,11 +42,10 @@ corner.CornerRadius = UDim.new(0, 10)
 
 -- Top Bar
 local topbar = Instance.new("Frame")
-topbar.Size = UDim2.new(1, 0, 0, 30)
+topbar.Size = UDim2.new(1, 0, 0, 28)
 topbar.BackgroundColor3 = Color3.fromRGB(30, 144, 255)
 topbar.BorderSizePixel = 0
 topbar.Parent = main
-
 local topCorner = Instance.new("UICorner", topbar)
 topCorner.CornerRadius = UDim.new(0, 10)
 
@@ -59,84 +56,84 @@ title.Position = UDim2.new(0, 10, 0, 0)
 title.BackgroundTransparency = 1
 title.Text = "📢 ANNOUNCEMENT"
 title.TextColor3 = Color3.fromRGB(255, 255, 255)
-title.Font = Enum.Font.GothamBold
+title.Font = Enum.Font.SourceSansBold
 title.TextScaled = true
 title.Parent = topbar
 
--- Minimize Button (-)
+-- Minimize Button
 local minimize = Instance.new("TextButton")
 minimize.Size = UDim2.new(0, 25, 0, 25)
-minimize.Position = UDim2.new(1, -50, 0, 2)
+minimize.Position = UDim2.new(1, -50, 0, 1)
 minimize.BackgroundColor3 = Color3.fromRGB(0, 100, 200)
 minimize.Text = "-"
-minimize.TextColor3 = Color3.fromRGB(255, 255, 255)
-minimize.Font = Enum.Font.GothamBold
+minimize.TextColor3 = Color3.new(1, 1, 1)
+minimize.Font = Enum.Font.SourceSansBold
 minimize.TextScaled = true
 minimize.Parent = topbar
+Instance.new("UICorner", minimize)
 
-local miniCorner = Instance.new("UICorner", minimize)
-miniCorner.CornerRadius = UDim.new(1, 0)
-
--- Close Button (x)
+-- Close Button
 local close = Instance.new("TextButton")
 close.Size = UDim2.new(0, 25, 0, 25)
-close.Position = UDim2.new(1, -25, 0, 2)
-close.BackgroundColor3 = Color3.fromRGB(255, 50, 50)
+close.Position = UDim2.new(1, -25, 0, 1)
+close.BackgroundColor3 = Color3.fromRGB(255, 60, 60)
 close.Text = "x"
-close.TextColor3 = Color3.fromRGB(255, 255, 255)
-close.Font = Enum.Font.GothamBold
+close.TextColor3 = Color3.new(1, 1, 1)
+close.Font = Enum.Font.SourceSansBold
 close.TextScaled = true
 close.Parent = topbar
-
-local closeCorner = Instance.new("UICorner", close)
-closeCorner.CornerRadius = UDim.new(1, 0)
+Instance.new("UICorner", close)
 
 -- Announcement Message
 local msg = Instance.new("TextLabel")
-msg.Size = UDim2.new(1, -20, 0, 50)
-msg.Position = UDim2.new(0, 10, 0, 40)
+msg.Size = UDim2.new(1, -20, 0, 45)
+msg.Position = UDim2.new(0, 10, 0, 38)
 msg.BackgroundTransparency = 1
 msg.Text = "Join My Discord Get Executor & Script For Free"
-msg.TextColor3 = Color3.fromRGB(255, 255, 255)
-msg.Font = Enum.Font.Gotham
+msg.TextColor3 = Color3.new(1, 1, 1)
+msg.Font = Enum.Font.SourceSans
 msg.TextWrapped = true
 msg.TextScaled = true
 msg.Parent = main
 
--- Join Discord Button
+-- Discord Button
 local button = Instance.new("TextButton")
-button.Size = UDim2.new(0, 180, 0, 30)
-button.Position = UDim2.new(0.5, -90, 1, -40)
+button.Size = UDim2.new(0, 160, 0, 28)
+button.Position = UDim2.new(0.5, -80, 1, -35)
 button.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
 button.Text = "Join Discord"
-button.TextColor3 = Color3.fromRGB(255, 255, 255)
-button.Font = Enum.Font.GothamBold
+button.TextColor3 = Color3.new(1, 1, 1)
+button.Font = Enum.Font.SourceSansBold
 button.TextScaled = true
 button.Parent = main
+Instance.new("UICorner", button)
 
-local buttonCorner = Instance.new("UICorner", button)
-buttonCorner.CornerRadius = UDim.new(0, 8)
-
--- Functions
+-- Logic
+local hidden = false
 button.MouseButton1Click:Connect(function()
-    setclipboard("https://discord.gg/N3Zmrm3e2n")
-    StarterGui:SetCore("SendNotification", {
-        Title = "Copied!";
-        Text = "Discord link copied! Paste in Chrome to join.";
-        Duration = 5;
-    })
+	if setclipboard then
+		setclipboard("https://discord.gg/N3Zmrm3e2n")
+		pcall(function()
+			StarterGui:SetCore("SendNotification", {
+				Title = "Copied!";
+				Text = "Discord link copied. Paste in Chrome to join.";
+				Duration = 4;
+			})
+		end)
+	else
+		print("Copy this link manually: https://discord.gg/N3Zmrm3e2n")
+	end
 end)
 
 close.MouseButton1Click:Connect(function()
-    gui:Destroy()
+	gui:Destroy()
 end)
 
-local hidden = false
 minimize.MouseButton1Click:Connect(function()
-    hidden = not hidden
-    for _, obj in ipairs(main:GetChildren()) do
-        if obj ~= topbar then
-            obj.Visible = not hidden
-        end
-    end
+	hidden = not hidden
+	for _, v in ipairs(main:GetChildren()) do
+		if v ~= topbar then
+			v.Visible = not hidden
+		end
+	end
 end)
